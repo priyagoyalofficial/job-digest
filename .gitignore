@@ -1,0 +1,11 @@
+# Runtime data: the crawled corpus (hundreds of MB), logs, and the sent-ledger.
+work/
+
+# Never commit a credential or a personal profile.
+.env
+.job-digest.env
+ideal-jd.md
+
+__pycache__/
+*.pyc
+.DS_Store
