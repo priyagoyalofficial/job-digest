@@ -115,11 +115,24 @@ uv run digest.py                          # the real thing
 Windows:
 
 ```powershell
-schtasks /Create /TN JobDigest /TR "<repo>\run-digest.cmd" /SC DAILY /ST 07:12 /F
+.\setup-task.ps1                 # daily at 07:12
+.\setup-task.ps1 -Time 06:45     # or pick your own time
 ```
 
-Then enable *Start the task as soon as possible after a scheduled start is missed*, or a day with
-the machine switched off is silently skipped.
+That registers the task with the settings that actually matter on a laptop:
+
+| | |
+|---|---|
+| `StartWhenAvailable` | a missed run fires next time the machine is available, instead of being skipped |
+| `RestartCount 3` | retries every 10 minutes, covering a login that beats the network up |
+| `ExecutionTimeLimit` | a stuck run cannot wedge the scheduler |
+
+Several missed days produce **one** catch-up run, not one per day — which is what you want, because
+the ledger means that single run sends the best postings you have not seen yet. Nothing is lost by a
+missed day: the ledger is written only after a successful send.
+
+Task Scheduler cannot wake a powered-off machine, so a laptop that stays shut for a week means no
+digest that week. Run it somewhere always-on if that matters.
 
 Linux/macOS — `12 7 * * * cd <repo> && uv run digest.py`.
 
