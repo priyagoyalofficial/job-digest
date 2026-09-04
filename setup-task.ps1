@@ -24,7 +24,7 @@
 #>
 [CmdletBinding()]
 param(
-    [string]$TaskName = "JobDigest",
+    [string]$TaskName = "AgoraJobDigest",
     [string]$Time     = "07:12"
 )
 
